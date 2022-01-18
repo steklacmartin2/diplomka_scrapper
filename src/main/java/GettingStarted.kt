@@ -1,10 +1,13 @@
 import com.github.doyaaaaaken.kotlincsv.dsl.context.WriteQuoteMode
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
-import java.io.BufferedWriter
-import java.nio.file.Paths
+import org.openqa.selenium.support.ui.ExpectedCondition
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
+
 
 // https://github.com/doyaaaaaken/kotlin-csv
 object GettingStarted {
@@ -20,10 +23,31 @@ object GettingStarted {
         val acceptButtonCookies = driver.findElement(By.id("didomi-notice-agree-button"))
         acceptButtonCookies.click()
 
-        val test = driver.findElement(By.xpath("//div[@class='box-content box-content-striped-articles']"))
-        val test2 =  test.findElement(By.xpath(".//a[@class='user-title-name']")).click()
+//        val test = driver.findElement(By.xpath("//div[@class='box-content box-content-striped-articles']"))
+//        val test2 =  test.findElement(By.xpath(".//a[@class='user-title-name']")).click()
 
-        val buttonDiv = driver.findElement((By.xpath("//div[@class='box-header-action']")))
+        val svkAutoriDiv = driver.findElement(By.xpath("//div[@class='column column-40']"))
+        val listAutorov = svkAutoriDiv.findElements(By.xpath(".//article[@class='article article-user article-user-60']//div[@class='article-user-content-left']//a"))
+        var counter = 0
+        val listUrl : MutableList<String> = mutableListOf()
+        for (a in listAutorov){
+            println(a.getAttribute("href"))
+            listUrl.add(a.getAttribute("href"))
+        }
+
+        for (autor in listAutorov.indices){
+
+            if (listUrl[counter].equals("https://www.csfd.sk/uzivatel/34562-flipper/")){
+                counter += 1
+                continue
+            }
+
+            //bohuzial kvoli DOM to musim robit jak uplny picus :)
+            driver[listUrl[counter]]
+            counter += 1
+
+
+            val buttonDiv = driver.findElement((By.xpath("//div[@class='box-header-action']")))
         buttonDiv.findElement(By.xpath(".//a[@class='button']")).click()
 
         val numberOfPagesString = driver.findElement((By.xpath("//header[@class='box-header']//span"))).text.subSequence(startIndex = 1,
@@ -37,6 +61,8 @@ object GettingStarted {
         if (numberOfPages % 10 != 0){
             numberOfPagesX10 += 1
         }
+
+
 //
 //        var review: MutableList<String> = mutableListOf()
 //        var ratingg: MutableList<String> = mutableListOf()
@@ -89,6 +115,8 @@ object GettingStarted {
             }
             driver.findElement(By.xpath(".//div[@class='box-more-bar']//a[@class='page-next']")).click()
         }
+            driver["https://www.csfd.sk/uzivatelia/"]
+
 //        val rows = listOf(ratingg, review)
 //        val writer = csvWriter {
 //            charset = "windows-1250"
@@ -109,6 +137,8 @@ object GettingStarted {
 //        searchBox.submit()
 
         println("som done")
+        Thread.sleep(5000)
+        }
         // Rozumím a přijímám
         Thread.sleep(5000) // Let the user actually see something!
 
