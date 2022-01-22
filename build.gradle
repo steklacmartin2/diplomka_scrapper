@@ -17,6 +17,7 @@ dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.41.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0") //for JVM platform
+    testImplementation 'com.codeborne:selenide:5.22.1'
 
 }
 
